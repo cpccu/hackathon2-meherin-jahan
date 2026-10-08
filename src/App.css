@@ -91,6 +91,30 @@
 .helpdesk-page .faq-item.open .faq-answer{display:block;max-height:none;height:auto;overflow:visible;opacity:1}
 
 /* Helpdesk topic cards */
+.signup-role-guidance { margin:-8px 0 22px; padding:12px 14px; border:1px solid #dce6de; border-radius:10px; background:#f2f6f1; color:#536b5b; font-size:.875rem; line-height:1.6; }
+.dashboard-search { display: flex; gap: 12px; margin: 24px 0; }
+.dashboard-search .search-box { flex: 1; min-width: 0; }
+.dashboard-stats { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; margin-bottom: 24px; }
+.dashboard-stat { padding: 22px; border: 1px solid #e1e8e2; border-radius: 16px; background: #fff; text-align: left; font: inherit; cursor: pointer; color: #263a2e; }
+.dashboard-stat>span,.dashboard-stat>strong,.dashboard-stat>small { display: block; }
+.dashboard-stat>strong { font-size: 2rem; padding: 8px 0; }
+.dashboard-stat>small { font-size: .875rem; color: #62756a; }
+.dashboard-stat:hover { border-color: #a92b37; }
+.dashboard-tip { margin-top: 18px; padding: 22px; background: #edf4ef; border-radius: 16px; line-height: 1.6; }
+.dashboard-tip h3 { margin: 0 0 8px; font-size: 1rem; }
+.dashboard-tip p { margin: 0; color: #52685b; }
+.sample-data-banner { padding: 14px 18px; border: 1px solid #e8d4a2; background: #fff7e5; color: #735718; border-radius: 12px; font-size: .875rem; line-height: 1.5; }
+.header-resource-search { display: flex; gap: 10px; align-items: center; width: 100%; }
+.header-resource-search .search-box { flex: 1; min-width: 0; }
+.live-dashboard .welcome-row { flex-wrap: wrap; gap: 16px; }
+@media(max-width:700px) {
+  .dashboard-search { flex-direction: column; }
+  .dashboard-stats { gap: 10px; }
+  .dashboard-stat { padding: 15px 12px; }
+  .dashboard-stat>span { font-size: .875rem; }
+  .dashboard-stat>strong { font-size: 1.6rem; }
+}
+@media(max-width:480px) { .dashboard-stats { grid-template-columns: 1fr; } }
 .helpdesk-page .help-categories {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;

@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react'
+import HelpdeskQuestions from './HelpdeskQuestions.jsx'
 import { supabase } from './supabaseClient.js'
+import { Attachment } from './Attachments.jsx'
+import { campusError } from './campusData.js'
 
 const categories = [
   ['all', 'All topics', 'Explore the helpdesk', 'rose'],
@@ -29,7 +32,7 @@ function sourceLink(value) {
   } catch { return null }
 }
 
-export default function Helpdesk() {
+export default function Helpdesk({user,role}) {
   const [answers, setAnswers] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -52,7 +55,7 @@ export default function Helpdesk() {
           setAnswers([])
           setError(['PGRST205', '42P01'].includes(loadError.code)
             ? 'The Helpdesk table is missing. Complete the Supabase database setup first.'
-            : loadError.message || 'Could not load answers. Please try again.')
+            : campusError(loadError))
         }
       } finally { if (active) setLoading(false) }
     }
@@ -71,12 +74,12 @@ export default function Helpdesk() {
     <label className="helpdesk-search">Search your question<input type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="Try question papers, private resources or buses" /></label>
     <div className="help-categories" aria-label="Filter answers by topic">
       {categories.map(([id, label, description, color]) => <button key={id} className={`help-category topic-${color} ${category === id ? 'selected' : ''}`} aria-pressed={category === id} onClick={() => setCategory(id)}>
-        <span className="topic-card-top"><span className="topic-icon"><TopicIcon topic={id} /></span><span className="topic-indicator" aria-hidden="true">{category === id ? '✓' : '↗'}</span></span>
+        <span className="topic-card-top"><span className="topic-icon"><TopicIcon topic={id} /></span><span className="topic-count">{loading ? '…' : answers.filter(item=>id==='all'||item.category===id).length} answers</span><span className="topic-indicator" aria-hidden="true">{category === id ? '✓' : '↗'}</span></span>
         <span className="topic-title">{label}</span>
         <span className="topic-description">{description}</span>
       </button>)}
     </div>
-    <div className="helpdesk-heading"><h2>Questions and answers</h2><button className="button button-secondary" disabled={loading} onClick={() => setRevision(value => value + 1)}>Refresh answers</button></div>
+    <div className="helpdesk-heading"><h2>Questions and answers</h2><div className="helpdesk-heading-actions">{(query.trim()||category!=='all')&&<button className="section-link" onClick={()=>{setQuery('');setCategory('all')}}>Clear filters</button>}<button className="button button-secondary" disabled={loading} onClick={() => setRevision(value => value + 1)}>Refresh answers</button></div></div>
     {loading ? <p role="status">Loading answers…</p> : error ? <div role="alert"><p>{error}</p><button className="button" onClick={() => setRevision(value => value + 1)}>Try again</button></div> : <>
       <p role="status">{matches.length} {matches.length === 1 ? 'answer' : 'answers'} found</p>
       {matches.length ? <div className="faq-list">{matches.map(item => {
@@ -84,9 +87,10 @@ export default function Helpdesk() {
         const url = sourceLink(item.source_url)
         return <div className={`faq-item ${expanded ? 'open' : ''}`} key={item.id}>
           <button aria-expanded={expanded} aria-controls={`answer-${item.id}`} onClick={() => setOpen(expanded ? null : item.id)}><span>{item.question}</span><span aria-hidden="true" className="faq-plus">{expanded ? '−' : '+'}</span></button>
-          {expanded && <div className="faq-answer" id={`answer-${item.id}`}><p className="helpdesk-answer-text">{item.answer}</p><div className="helpdesk-source">Source: {url ? <a href={url} target="_blank" rel="noopener noreferrer">{item.source_label || 'Source document'}</a> : item.source_label || 'CampusOS guide'}{item.updated_at && <span> · Updated {new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Dhaka', dateStyle: 'medium' }).format(new Date(item.updated_at))}</span>}</div></div>}
+          {expanded && <div className="faq-answer" id={`answer-${item.id}`}><p className="helpdesk-answer-text">{item.answer}</p><Attachment path={item.attachment_path} name={item.attachment_name}/><div className="helpdesk-source">Source: {url ? <a href={url} target="_blank" rel="noopener noreferrer">{item.source_label || 'Source document'}</a> : item.source_label || 'CampusOS guide'}{item.updated_at && <span> · Updated {new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Dhaka', dateStyle: 'medium' }).format(new Date(item.updated_at))}</span>}</div></div>}
         </div>
       })}</div> : <div className="resource-empty"><h3>No answers found</h3><p>{query.trim() ? 'Try fewer words or another topic.' : 'No information has been published for this topic yet. Contact your department office for current campus guidance.'}</p><button className="button button-secondary" onClick={() => { setQuery(''); setCategory('all') }}>Show all answers</button></div>}
     </>}
+    {user&&<HelpdeskQuestions user={user} role={role}/>}
   </div>
 }
