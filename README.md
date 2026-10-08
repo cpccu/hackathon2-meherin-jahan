@@ -212,7 +212,7 @@ React interface
           ├── PostgreSQL    Records, relationships and RLS
           └── Storage       Private documents and images
 
-Vite production build → dist/ → static hosting (Vercel planned)
+Vite production build → dist/
 ```
 
 Browser actions call Supabase directly; this version has no separate custom application server. React state manages navigation. Data refreshes when modules open or users select Refresh.
@@ -234,7 +234,7 @@ Browser actions call Supabase directly; this version has no separate custom appl
 | Node test runner | Unit and SQL source regression checks | `tests/` |
 | Browser APIs/storage | Downloads, clipboard and bookmarks | File actions and saved resources |
 
-**Development tools:** Bolt supported initial frontend prototyping; Codex assisted local implementation, debugging and documentation. VS Code/terminal supported local development, Git/GitHub handles version control, and the Supabase dashboard handles backend configuration. Vercel is the planned hosting provider.
+**Development tools:** Bolt supported initial frontend prototyping; Codex assisted local implementation, debugging and documentation. VS Code/terminal supported local development, Git/GitHub handles version control, and the Supabase dashboard handles backend configuration.
 
 Bolt and Codex are development tools, not runtime dependencies. The current application uses structured FAQ/keyword search and has no LLM API integration.
 
@@ -315,7 +315,7 @@ CampusOS Meherin/
 ├── supabase/                 Migrations, policies and activation guide
 ├── tests/                    Unit and SQL source regression checks
 ├── scripts/                  Read-only backend diagnostic
-├── docs/                     Deployment, verification and submission guides
+├── docs/                     Verification and submission guides
 ├── .env.example              Public configuration placeholders
 ├── .gitignore                Local-file exclusions
 └── package.json              Dependencies and commands
@@ -323,7 +323,7 @@ CampusOS Meherin/
 
 </details>
 
-## Verification and deployment
+## Verification
 
 ### Commands
 
@@ -354,12 +354,6 @@ are configured for initial testing; login delivered an eight-digit code and
 new-signup confirmation did not arrive in the latest manual check. The six-digit
 OTP setting and signup email delivery still need verification.
 
-### Vercel setup
-
-Use the **Vite** preset, the folder containing `package.json` as Root Directory, `npm run build` as the build command and `dist` as the output directory. Add both public Supabase environment variables. Configure the deployed Site URL and permitted confirmation/recovery redirects in Supabase, including `/?verified=1` and `/?recovery=1`.
-
-[Follow the complete push and deployment guide →](docs/DEPLOYMENT.md)
-
 ## Current limitations
 
 - Staff must maintain accurate, current official information.
@@ -376,7 +370,6 @@ Use the **Vite** preset, the folder containing `package.json` as Root Directory,
 | :--- | :--- |
 | [Activation](supabase/ACTIVATE_CAMPUS.md) | Database installation and first-admin setup |
 | [Email verification](docs/EMAIL_VERIFICATION.md) | Signup confirmation, six-digit code login, SMTP and access policies |
-| [Deployment](docs/DEPLOYMENT.md) | Git, hosting and authentication configuration |
 | [Verification](docs/VERIFICATION.md) | Recorded evidence and remaining acceptance checks |
 | [Submission](docs/SUBMISSION.md) | Project description and submission fields |
 | [Questions, attendance & QR](docs/QUESTIONS_ATTENDANCE_QR.md) | Upgrade activation and staff/student workflows |

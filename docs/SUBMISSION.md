@@ -43,7 +43,7 @@ search, not an AI chatbot. No custom AI model is required for this version.
 | Live HTTPS URL | Fill in after deployment |
 | Organization repository | https://github.com/cpccu/hackathon2-meherin-jahan |
 | Demo video link | Fill in after recording and enabling access |
-| Setup documentation | README.md and docs/DEPLOYMENT.md |
+| Setup documentation | README.md and supabase/ACTIVATE_CAMPUS.md |
 | Verification evidence | Record completed checks from docs/VERIFICATION.md |
 | Judge credentials | Supply dedicated confirmed accounts privately in the form |
 
