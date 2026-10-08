@@ -408,9 +408,8 @@ Campus-wide and course notices support image/PDF viewing and downloads. Courses 
 
 CampusOS uses React, Vite and CSS with Supabase Auth, PostgreSQL, Row Level Security and private Storage. QR tickets support event admission. Authentication is designed for signup email confirmation and six-digit email-code login. The database migration check passed; live signup-email delivery and the configured OTP length still need final verification. The Helpdesk uses sourced FAQ and keyword search; no AI capability is claimed.
 
-### Presentation demo
 
-Google Drive presentation/demo video link:
+### Website Live Link: https://hackathon2-meherin.vercel.app/
 
 ---
 
