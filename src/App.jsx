@@ -11,8 +11,26 @@ import Landing from './Landing.jsx'
 import EmailVerification from './EmailVerification.jsx'
 import { isEmailVerifiedSession } from './emailSession.js'
 
+const LAST_WORKSPACE_PAGE_KEY = 'campusos:last-workspace-page'
+const WORKSPACE_PAGES = new Set([
+  'dashboard', 'resources', 'events', 'lostfound', 'notices', 'transportation',
+  'courses', 'helpdesk', 'notifications', 'profile', 'admin', 'upload',
+])
+
 function App() {
-  const [page, setPage] = useState(() => {const query=new URLSearchParams(window.location.search);return query.get('recovery')==='1'?'reset-password':query.get('verified')==='1'?'email-verified':'landing'})
+  const [page, setPage] = useState(() => {
+    const query = new URLSearchParams(window.location.search)
+    if (query.get('recovery') === '1') return 'reset-password'
+    if (query.get('verified') === '1') return 'email-verified'
+
+    try {
+      const savedPage = window.sessionStorage.getItem(LAST_WORKSPACE_PAGE_KEY)
+      if (WORKSPACE_PAGES.has(savedPage)) return savedPage
+    } catch {
+      // Storage can be unavailable in private browsing; the app still works normally.
+    }
+    return 'landing'
+  })
   const [verifiedSession,setVerifiedSession]=useState(false)
   const [linkError]=useState(()=>new URLSearchParams(window.location.hash.slice(1)).get('error_description')||'')
   const [user, setUser] = useState(null)
@@ -62,7 +80,17 @@ function App() {
     return () => { active = false; subscription.unsubscribe() }
   }, [])
 
-  const go = (next) => { setPage(next); setMenuOpen(false); window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }) }
+  const go = (next) => {
+    setPage(next)
+    try {
+      if (WORKSPACE_PAGES.has(next)) window.sessionStorage.setItem(LAST_WORKSPACE_PAGE_KEY, next)
+      else if (next === 'landing') window.sessionStorage.removeItem(LAST_WORKSPACE_PAGE_KEY)
+    } catch {
+      // Storage is optional; navigation should continue even when it is unavailable.
+    }
+    setMenuOpen(false)
+    window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
+  }
   async function logout() {
     setSigningOut(true)
     setLogoutError('')
